@@ -102,7 +102,10 @@ public class Client {
                 try {
                     String serverMessage;
                     while ((serverMessage = in.readLine()) != null) {
-                        chatArea.append(serverMessage + "\n");
+                        if (serverMessage.startsWith("/users ")) {
+                            updateUserList(serverMessage.replace("/users ", ""));
+                        } else
+                            chatArea.append(serverMessage + "\n");
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -110,6 +113,13 @@ public class Client {
             }).start();
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    private void updateUserList(String serverMessage) {
+        userListModel.clear();
+        for (String username : serverMessage.split(", ")) {
+            userListModel.addElement(username);
         }
     }
 

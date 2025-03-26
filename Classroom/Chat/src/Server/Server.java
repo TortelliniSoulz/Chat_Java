@@ -44,6 +44,7 @@ public class Server {
 
                     System.out.println(username + " joined the chat!");
                     broadcastMessage(username + " joined the chat!");
+                    updateUserList();
                 }
 
                 // while (true) {
@@ -78,12 +79,19 @@ public class Server {
             } finally {
                 try {
                     clients.remove(username);
+                    updateUserList();
                     socket.close();
                 } catch (IOException ex) {
                     ex.printStackTrace();
                     clients.remove(username);
+                    updateUserList();
                 }
             }
+        }
+
+        private void updateUserList() {
+            String list = "/users " + String.join(", ", clients.keySet());
+            broadcastMessage(list);
         }
 
         private void broadcastMessage(String message) {
