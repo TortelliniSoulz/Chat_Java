@@ -6,7 +6,7 @@ import java.net.*;
 
 public class ChatClientGUI {
     private static final String SERVER_IP = "127.0.0.1";
-    private static final int PORT = 12345;
+    private static final int PORT = 42069;
 
     private JFrame frame;
     private JTextArea chatArea;
