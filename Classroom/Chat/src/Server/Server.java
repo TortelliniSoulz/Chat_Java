@@ -77,9 +77,11 @@ public class Server {
                 ex.printStackTrace();
             } finally {
                 try {
+                    clients.remove(username);
                     socket.close();
                 } catch (IOException ex) {
                     ex.printStackTrace();
+                    clients.remove(username);
                 }
             }
         }

@@ -18,6 +18,8 @@ public class Client {
     private JTextArea chatArea;
     private JTextField messageField;
     private JButton sendButton;
+    private JList<String> userList;
+    private DefaultListModel userListModel;
 
     public Client() {
         frame = new JFrame("Spaiciat");
@@ -31,8 +33,15 @@ public class Client {
         panel.add(messageField);
         panel.add(sendButton);
 
+        userListModel = new DefaultListModel<>();
+        userList = new JList<>(userListModel);
+        JPanel userListPanel = new JPanel();
+        userListPanel.add(userList);
+        userListPanel.setPreferredSize(new Dimension(100, 0));
+
         frame.getContentPane().add(chatArea, BorderLayout.CENTER);
         frame.getContentPane().add(panel, BorderLayout.SOUTH);
+        frame.getContentPane().add(userListPanel, BorderLayout.EAST);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
@@ -81,8 +90,13 @@ public class Client {
             String username;
             do {
                 username = JOptionPane.showInputDialog(frame, !msg.isEmpty() ? msg : "Enter username:");
-                out.println(username);
+                if (username == null)
+                    System.exit(0);
+                else
+                    out.println(username);
             } while ((msg = in.readLine()).equals("Username already taken! Try again:"));
+
+            userListModel.addElement(username);
 
             new Thread(() -> {
                 try {
@@ -102,34 +116,4 @@ public class Client {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(Client::new);
     }
-
-    // public static void main(String[] args) {
-    //     try (
-    //         Socket socket = new Socket(SERVER_IP, PORT);
-    //         Scanner scanner = new Scanner(System.in);
-    //         BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-    //         PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-    //     ) {
-    //         System.out.println("Inserisci username: ");
-    //         String username = scanner.nextLine();
-    //         out.println(username);
-
-    //         new Thread(() -> {
-    //             try {
-    //                 String serverMessage;
-    //                 while ((serverMessage = in.readLine()) != null)
-    //                     System.out.println(serverMessage);
-    //             } catch (IOException ex) {
-    //                 ex.printStackTrace();
-    //             }
-    //         }).start();
-
-    //         while (true) {
-    //             String message = scanner.nextLine();
-    //             out.println(message);
-    //         }
-    //     } catch (IOException ex) {
-    //         ex.printStackTrace();
-    //     }
-    // }
 }
